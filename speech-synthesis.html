@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech Synthesis Demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Speech Synthesis API</h1>
+  <button id="speak-button">Say Hello</button>
+
+  <script>
+    document.getElementById('speak-button').addEventListener('click', function () {
+      var u = new SpeechSynthesisUtterance();
+      u.text = 'Hello World';
+      u.lang = 'en-US';
+      u.rate = 1.2;
+      u.onend = function(event) {
+        alert('Finished in ' + event.elapsedTime + ' seconds.');
+      };
+      speechSynthesis.speak(u);
+    });
+  </script>
+
+</body>
+</html>

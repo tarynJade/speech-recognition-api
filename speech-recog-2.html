@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Click to Speak</title>
+</head>
+<body>
+  <button id="button" onclick="toggleStartStop()">Click to Speak</button>
+  <div style="border:dotted;padding:10px">
+    <span id="final_span"></span>
+    <span id="interim_span" style="color:grey"></span>
+  </div>
+
+  <script type="text/javascript">
+    
+    var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Sorry, your browser doesn't support the Web Speech API.");
+    } else {
+      var recognizing;
+      var recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      reset();
+      recognition.onend = reset;
+
+      recognition.onresult = function (event) {
+        var final = "";
+        var interim = "";
+        for (var i = 0; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            final += event.results[i][0].transcript;
+          } else {
+            interim += event.results[i][0].transcript;
+          }
+        }
+        document.getElementById("final_span").innerHTML = final;
+        document.getElementById("interim_span").innerHTML = interim;
+      };
+
+      function reset() {
+        recognizing = false;
+        document.getElementById("button").innerHTML = "Click to Speak";
+      }
+
+      function toggleStartStop() {
+        if (recognizing) {
+          recognition.stop();
+          reset();
+        } else {
+          recognition.start();
+          recognizing = true;
+          document.getElementById("button").innerHTML = "Click to Stop";
+          document.getElementById("final_span").innerHTML = "";
+          document.getElementById("interim_span").innerHTML = "";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
